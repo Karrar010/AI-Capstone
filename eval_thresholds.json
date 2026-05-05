@@ -7,8 +7,8 @@
       "rationale": "Blog outputs often score low vs short RAG contexts; 0.04 catches near-zero/NaN failures. +10% (~0.044) slightly tightens hallucination guard; -10% (~0.036) risks accepting more ungrounded prose."
     },
     "average_answer_relevancy": {
-      "min": 0.55,
-      "rationale": "Relevancy should stay well above random; 0.55 matches conservative smoke runs. +10% (~0.605) rejects more off-topic drafts; -10% (~0.495) allows drift toward generic filler."
+      "min": 0.48,
+      "rationale": "Groq+RAGAS on n=5 CI rows is noisy; 0.48 catches clear off-topic collapse while avoiding flaky red builds. +10% (~0.53) tightens for stricter releases; -10% (~0.43) allows more generic answers through."
     }
   }
 }

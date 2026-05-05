@@ -23,6 +23,16 @@ jobs:
           python-version: "3.12"
           cache: pip
 
+      - name: Verify GROQ_API_KEY secret
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          if [ -z "$GROQ_API_KEY" ]; then
+            echo "::error::Repository secret GROQ_API_KEY is missing. Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          echo "GROQ_API_KEY is set (value not shown)."
+
       - name: Install dependencies
         run: pip install -r requirements.txt
 

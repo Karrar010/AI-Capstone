@@ -38,7 +38,11 @@ def _is_bad_number(x: object) -> bool:
 
 def main() -> int:
     if not os.getenv("GROQ_API_KEY", "").strip():
-        print("run_eval: missing GROQ_API_KEY in environment", file=sys.stderr)
+        print(
+            "run_eval: missing GROQ_API_KEY in environment "
+            "(locally: export/set GROQ_API_KEY; GitHub: repo Settings → Secrets → Actions).",
+            file=sys.stderr,
+        )
         return 1
 
     if not THRESHOLDS_PATH.is_file():
@@ -104,6 +108,14 @@ def main() -> int:
     }
     REPORT_PATH.write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps({"overall_pass": all_pass, "report": str(REPORT_PATH)}, indent=2))
+    if not all_pass:
+        failed = [g for g in gate_results if not g["pass"]]
+        print("run_eval: gate failure(s):", file=sys.stderr)
+        for g in failed:
+            print(
+                f"  - {g['metric']}: score={g['score']} need min={g['threshold_min']}",
+                file=sys.stderr,
+            )
     return 0 if all_pass else 1
 
 

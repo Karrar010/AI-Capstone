@@ -16,6 +16,16 @@ import urllib.request
 import uuid
 
 
+def get_url(url: str, timeout: float = 60.0) -> tuple[int, str]:
+    req = urllib.request.Request(url, method="GET")
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.getcode(), resp.read().decode("utf-8", errors="replace")
+    except urllib.error.HTTPError as e:
+        raw = e.read().decode("utf-8", errors="replace") if e.fp else ""
+        return e.code, raw
+
+
 def post_json(url: str, payload: dict, timeout: float = 600.0) -> tuple[int, str]:
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
@@ -38,7 +48,7 @@ def main() -> int:
     args = p.parse_args()
     base = args.base_url.rstrip("/")
 
-    code, health = post_json(f"{base}/health", {}, timeout=30.0)
+    code, health = get_url(f"{base}/health", timeout=30.0)
     if code != 200:
         print("health failed", code, health, file=sys.stderr)
         return 1
