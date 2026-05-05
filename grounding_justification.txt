@@ -1,0 +1,9 @@
+Why does the Blog Writing Agent need domain data instead of relying on its pre-trained knowledge?
+
+1. PROJECT-SPECIFIC STYLE: The LLM's general training does not know our organization's blog standards—e.g., when to use code snippets, how we format headers (##), or our citation rules. Domain docs encode these so every blog follows our guidelines.
+
+2. CONSISTENCY: Without grounding, the model may vary tone, structure, and format across runs. RAG ensures the Writer always receives the same structural and citation rules, producing uniform output.
+
+3. UPDATABILITY: Guidelines change (e.g., new citation formats, tone adjustments). The knowledge base can be updated without retraining the model. The agent picks up changes on the next run.
+
+4. REDUCED HALLUCINATION: The model may invent citation formats or structure if left to its own devices. Retrieving from our docs grounds it in facts—what we actually require—rather than plausible but incorrect patterns.

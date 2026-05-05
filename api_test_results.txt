@@ -1,0 +1,37 @@
+Lab 8 — Example successful API calls (paste your own outputs after running locally)
+===================================================================================
+
+Prerequisites: venv active, GROQ_API_KEY in .env, dependencies installed.
+
+Start server (project root):
+
+  uvicorn main:app --host 127.0.0.1 --port 8000
+
+Health check:
+
+  curl -s http://127.0.0.1:8000/health
+
+Example POST /chat (replace thread_id with a new UUID each run if you want a fresh checkpoint):
+
+  curl -s -X POST http://127.0.0.1:8000/chat ^
+    -H "Content-Type: application/json" ^
+    -d "{\"message\": \"How to structure a short technical blog about Python\", \"thread_id\": \"api-demo-001\"}"
+
+Example response (illustrative — your merged content will differ):
+
+  {"final_answer":"# How to Structure a Short Technical Blog About Python\n\n## ...","status":"interrupted_awaiting_hitl"}
+
+Notes:
+- status "interrupted_awaiting_hitl" is expected: the graph uses interrupt_before save_blog (Lab 5 HITL). final_answer holds proposed merged markdown.
+- status "blocked" means Lab 6 guardrails rejected the message.
+- status "completed" if the run ends without pending nodes (e.g. alert short-circuit ends at END).
+
+Example POST /stream (SSE; PowerShell may need curl from Git or use a small Python client):
+
+  curl -N -X POST http://127.0.0.1:8000/stream ^
+    -H "Content-Type: application/json" ^
+    -d "{\"message\": \"Tips for clear markdown headings in docs\", \"thread_id\": \"api-stream-001\"}"
+
+You should see lines starting with "data: " and a final "data: [DONE]".
+
+(OpenAPI docs: http://127.0.0.1:8000/docs )

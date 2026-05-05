@@ -1,0 +1,6 @@
+Lab 7 — Bottleneck analysis (1 paragraph; fill after LangSmith review)
+=======================================================================
+
+After running the five complex queries in lab7_complex_queries.txt with LangSmith tracing enabled, inspect the trace waterfall and identify which LangGraph node consumed the most wall time and tokens (typically the parallel worker_node LLM calls and/or the researcher_node tool loop with Tavily + retrieve). Summarize your finding in this paragraph and propose one concrete mitigation (for example: cap orchestrator task count, reduce Tavily max_results, use a smaller model for the router, or cache FAISS retrieval for repeated topics).
+
+(Replace this text with your observation and proposed fix.)

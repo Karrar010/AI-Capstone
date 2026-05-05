@@ -1,0 +1,43 @@
+{
+  "summary": {
+    "average_faithfulness": 0.06896551724137931,
+    "average_answer_relevancy": 0.8555732389737082,
+    "average_tool_accuracy": 1.0,
+    "num_runs": 3
+  },
+  "per_run": [
+    {
+      "id": "v01",
+      "topic": "How to structure a technical blog post with clear headers and citations",
+      "category": "vector_heavy",
+      "tool_accuracy": 1.0,
+      "expected_tools": [],
+      "tool_trace": [],
+      "response_len": 6257,
+      "faithfulness": 0.0,
+      "answer_relevancy": 0.6241146584513377
+    },
+    {
+      "id": "v02",
+      "topic": "Best practices for tone and readability in developer-facing documentation blogs",
+      "category": "vector_heavy",
+      "tool_accuracy": 1.0,
+      "expected_tools": [],
+      "tool_trace": [],
+      "response_len": 8412,
+      "faithfulness": 0.20689655172413793,
+      "answer_relevancy": 0.9918942810342412
+    },
+    {
+      "id": "v03",
+      "topic": "Checklist for revising a draft technical article before publication",
+      "category": "vector_heavy",
+      "tool_accuracy": 1.0,
+      "expected_tools": [],
+      "tool_trace": [],
+      "response_len": 5591,
+      "faithfulness": 0.0,
+      "answer_relevancy": 0.9507107774355459
+    }
+  ]
+}

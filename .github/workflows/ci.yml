@@ -1,0 +1,44 @@
+# Lab 10: push to main → install deps → run RAGAS gate (run_eval.py).
+# Add repository secrets: GROQ_API_KEY (required). Optional: TAVILY_API_KEY for fuller eval rows.
+#
+# Breaking-change demo: intentionally lower eval_thresholds.json or corrupt the agent on a branch
+# and open a PR; restore thresholds / code on main to go green again.
+
+name: CI Quality Gate
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run evaluation gate
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          CI_EVAL_LIMIT: "5"
+          BWA_LLM_GUARD: "0"
+        run: python run_eval.py
+
+      - name: Upload CI eval report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-eval-results
+          path: |
+            ci_eval_results.json
+            ci_eval_raw.json

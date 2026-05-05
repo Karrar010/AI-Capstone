@@ -1,0 +1,34 @@
+=== Collaboration Trace: Agent A (Researcher) → Agent B (Writer) ===
+Example: "Research the state of multimodal LLMs in 2026 (Agent A), then write a professional blog post (Agent B)."
+
+--- Agent A (Researcher) - Internal Dialogue ---
+[NODE: researcher]
+Input: topic="The state of multimodal LLMs in 2026"
+Action: Calling tavily_search_tool(query="multimodal LLMs 2026", max_results=5)
+Observation: Retrieved 5 search results with URLs and snippets.
+Action: Calling retrieve_from_knowledge_base_tool(query="blog writing guidelines structure", k=4)
+Observation: Retrieved domain guidelines (headers, citations, code snippets).
+Action: Stopping - sufficient evidence gathered.
+Output: evidence=[{title, url, snippet}, ...], passed to next node.
+
+--- Handover: Researcher → RAG Retrieve → Orchestrator ---
+State transfer: evidence + rag_chunks flow to Writer persona.
+
+--- Agent B (Writer) - Internal Dialogue ---
+[NODE: orchestrator]
+Input: evidence from Agent A, rag_chunks (guidelines)
+Action: Creating Plan (blog_title, tasks with goals, bullets, target_words).
+Output: plan with 4-6 section tasks.
+
+[NODE: worker] (parallel workers for each section)
+Input: task, plan, evidence, rag_chunks from state
+Action: LLM generates one markdown section. No tool calls.
+Output: (task_id, markdown_section)
+
+[NODE: merge_content]
+Input: All worker outputs
+Action: Merge sections in order.
+Output: merged_md (full blog post)
+
+--- Final ---
+Writer (Agent B) has produced the complete blog from Researcher's (Agent A) evidence.

@@ -1,0 +1,8 @@
+# Five complex topics for LangSmith trace / bottleneck analysis (Lab 7)
+# Paste each line (without the leading number) into the Streamlit Topic box while LANGCHAIN_TRACING_V2=true.
+
+1. Compare multimodal LLM product directions in 2026 for enterprise vs startup buyers, with cited sources and a section on evaluation benchmarks and another on data governance.
+2. Write a long-form technical blog that merges blog-writing best practices from domain guidelines with a 2026 survey of Python packaging (uv, pip, poetry) including release timelines and links.
+3. Explain RAG architecture for a documentation assistant: retrieval, reranking, citation rules, and failure modes, grounded in both internal style guidelines and current industry articles from 2026.
+4. Produce a CTO-oriented post on edge AI inference hardware trends in 2026 with cost themes, vendor comparison, and a checklist for procurement, each section citing web evidence.
+5. Synthesize LangGraph-style multi-agent orchestration patterns for content pipelines (researcher vs writer handoff), citing 2026 framework docs and aligning section structure with markdown header guidelines.

@@ -1,0 +1,1 @@
+Technical blog writing guidelines. Use clear headers (##). Include code snippets when relevant. Cite sources with markdown links.

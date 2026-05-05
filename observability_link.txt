@@ -1,0 +1,12 @@
+Lab 7 — LangSmith observability link
+====================================
+
+Paste your public LangSmith project URL or a direct link to one representative trace below.
+If your course does not allow sharing live links, attach a PDF export of a trace from LangSmith instead and note that here.
+
+URL:
+(Paste https://smith.langchain.com/... here)
+
+Notes:
+- Enable tracing with LANGCHAIN_TRACING_V2=true, LANGCHAIN_API_KEY, and LANGCHAIN_PROJECT in .env
+- Run 5 complex queries from lab7_complex_queries.txt while tracing is on, then pick the slowest or most interesting trace
