@@ -33,15 +33,29 @@ jobs:
           fi
           echo "GROQ_API_KEY is set (value not shown)."
 
+      - name: Cache Hugging Face hub
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            hf-${{ runner.os }}-
+
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        env:
+          PIP_DEFAULT_TIMEOUT: "900"
+        run: |
+          python -m pip install --upgrade pip
+          pip install --retries 10 --default-timeout=900 -r requirements.txt
 
       - name: Run evaluation gate
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
-          CI_EVAL_LIMIT: "5"
+          # Fewer rows = faster, fewer Groq/RAGAS flakes on free-tier CI
+          CI_EVAL_LIMIT: "3"
           BWA_LLM_GUARD: "0"
+          TOKENIZERS_PARALLELISM: "false"
         run: python run_eval.py
 
       - name: Upload CI eval report
@@ -49,6 +63,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ci-eval-results
+          if-no-files-found: warn
           path: |
             ci_eval_results.json
             ci_eval_raw.json
+            ci_eval_diag.txt

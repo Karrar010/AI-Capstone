@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parent
 THRESHOLDS_PATH = ROOT / "eval_thresholds.json"
 RAW_PATH = ROOT / "ci_eval_raw.json"
 REPORT_PATH = ROOT / "ci_eval_results.json"
+DIAG_PATH = ROOT / "ci_eval_diag.txt"
 
 
 def _is_bad_number(x: object) -> bool:
@@ -64,13 +65,29 @@ def main() -> int:
         "--output",
         str(RAW_PATH),
     ]
-    proc = subprocess.run(cmd, cwd=str(ROOT))
+    proc = subprocess.run(
+        cmd,
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
     if proc.returncode != 0:
-        print("run_eval: lab7_eval.py failed", file=sys.stderr)
+        diag = (
+            f"lab7_eval.py exit code: {proc.returncode}\n\n"
+            f"--- stdout (tail) ---\n{proc.stdout[-12000:]}\n\n"
+            f"--- stderr (tail) ---\n{proc.stderr[-12000:]}\n"
+        )
+        DIAG_PATH.write_text(diag, encoding="utf-8")
+        print("run_eval: lab7_eval.py failed — see ci_eval_diag.txt or logs below", file=sys.stderr)
+        print(proc.stderr[-8000:] or proc.stdout[-8000:], file=sys.stderr)
         return 1
 
     if not RAW_PATH.is_file():
-        print(f"run_eval: missing output {RAW_PATH}", file=sys.stderr)
+        msg = f"run_eval: missing output {RAW_PATH} (lab7 exited 0 but wrote no file)"
+        DIAG_PATH.write_text(msg + "\n\n" + proc.stdout + "\n" + proc.stderr, encoding="utf-8")
+        print(msg, file=sys.stderr)
         return 1
 
     data = json.loads(RAW_PATH.read_text(encoding="utf-8"))
